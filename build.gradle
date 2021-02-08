@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'project-report'
+}
+
+group 'info.app'  // equals to project.group (Project Object Model)
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+// buildDir = "myBuildDir"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation project(':JsonDisplay')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task showDate {
+    dependsOn build
+    group = 'custom'
+    description = 'Show current date.'
+    doLast {
+        println ''
+        println 'Current Date: ' + new Date()
+        println ''
+    }
+}
+
+class ShowDateClass extends DefaultTask {
+    String dateMsg = "Date is: "
+
+    @TaskAction
+    void showDate() {
+        println ''
+        println dateMsg + new Date()
+        println ''
+    }
+}
+
+task showDateClassVer(type: ShowDateClass, group: 'custom', description: 'Show date.')
+
+task extendShowDate(type: ShowDateClass, group: 'custom', description: 'Show date.') {
+    dateMsg = "Extend Date is: "
+}
